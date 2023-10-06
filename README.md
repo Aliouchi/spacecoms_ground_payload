@@ -6,10 +6,10 @@
 
 ## Repository Contents
   This repository contains various resources and code related to our Ground Station Payload Operations module. Here's a brief overview of what you can find here:
-    Project Source Code: The heart of our project. The source code for the logic of our module, including all the filters, routing, and communication with other modules.
-    Testing and Validation: Test scripts, testing data, and all the validation procedures we used to ensure the reliability and correctness of our module.
-    Issues: The record of all the issues we raised and encountered while working on this project, our discussions and comments. Feel free to open issues if you have questions or suggestions.
-    Wikis and ReadMes: The place to go for an elaborate description of our module and its' part in our system. This ReadMe is one of the files you may want to read through to get a feel of what we are doing here.
+  - Project Source Code: The heart of our project. The source code for the logic of our module, including all the filters, routing, and communication with other modules.
+  - Testing and Validation: Test scripts, testing data, and all the validation procedures we used to ensure the reliability and correctness of our module.
+  - Issues: The record of all the issues we raised and encountered while working on this project, our discussions and comments. Feel free to open issues if you have questions or suggestions.
+  - Wikis and ReadMes: The place to go for an elaborate description of our module and its' part in our system. This ReadMe is one of the files you may want to read through to get a feel of what we are doing here.
 
 ## Team Members
   - Ali Noureddine
@@ -19,14 +19,14 @@
 
 ## Objective and System Requirements
   Our primary objective within this module is to create a logical bridge which is going to serve as a filter between Science Center Payload Operations Module and Ground Station Command and Data Handling Module. In this context, we aim to: 
-    - Intercept all the data packets sent out by the Science Center Payload Operations Module and going through our subsystem.
-    - Validate the integrity of all captured data packets based on the data structure, destination, and checksums.
-    - Verify whether the requests inside the data packet are reasonable and performable by communticating with the Ground Station Command and Data Handling Module.
-    - Flag the data packets as valid if they pass the checks and forward them to the Ground Station Command and Data Handling Module for further routing.
-    - Flag the data packets as invalid if they are such and return them back to the Science Center Payload Operations Module for restructuring.
-    - Once the data packet is forwarded to the Ground Station Command and Data Handling Module have an open port to receive a feedback on data delivery.
-    - Despite the data being delivered successfully or lost in transmition, pass this response to the Science Center Payload Operations Module.
-    - Log all actions, steps, transmissions and communications performed by the module to keep track of all the module's actions. 
+  - Intercept all the data packets sent out by the Science Center Payload Operations Module and going through our subsystem.
+  - Validate the integrity of all captured data packets based on the data structure, destination, and checksums.
+  - Verify whether the requests inside the data packet are reasonable and performable by communticating with the Ground Station Command and Data Handling Module.
+  - Flag the data packets as valid if they pass the checks and forward them to the Ground Station Command and Data Handling Module for further routing.
+  - Flag the data packets as invalid if they are such and return them back to the Science Center Payload Operations Module for restructuring.
+  - Once the data packet is forwarded to the Ground Station Command and Data Handling Module have an open port to receive a feedback on data delivery.
+  - Despite the data being delivered successfully or lost in transmition, pass this response to the Science Center Payload Operations Module.
+  - Log all actions, steps, transmissions and communications performed by the module to keep track of all the module's actions. 
 
 ## Getting Started
   To get a feel of our Ground Station Payload Operations module, please feel free to download the latest release by navigating to the releases tab and selecting the freshest version.
