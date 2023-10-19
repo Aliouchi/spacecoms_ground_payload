@@ -35,6 +35,27 @@
   Please remember, that our module is just a logical bridge, serving as an information filter between two other modules of our system, thus it does not have a User Interface for you to see.
   To experience the full functionality and complexity of our module please navigate yourself to the other modules using the links below, install them using their guidelines and run it all together.
 
+  Please follow the following steps to install and setup our module on your workstation.
+  - [ ] Step 1. Cloning the repository on your workstation.
+  ```
+  git clone https://github.com/Aliouchi/spacecoms_ground_payload.git
+  ```
+  
+  - [ ] Step 2. Make sure you have up-to-date python installed on your workstation (Should be > 3.10).
+  ```
+  python --version
+  ```
+  
+  - [ ] Step 3. Install all the required packages for our project.
+  ```
+  pip install -r requirements.txt
+  ```
+  
+  - [ ] Step 4. Running the application.
+  ```
+  flask --app app.py run --debug
+  ```
+
 ## Links to Other Modules
   - Spacecraft Payload Operations [Module 1](https://github.com)
   - Spacecraft Command and Data Handling [Module 2](https://github.com/omarnunezsiri/Spacecraft_CnDH)
