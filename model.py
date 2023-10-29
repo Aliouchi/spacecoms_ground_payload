@@ -5,20 +5,22 @@ app = Flask(__name__)
 @app.route('/api/endpoint', methods=['GET'])
 def test_endpoint():
     try:
-        action = request.args.get('action')
-        location = request.args.get('location')
-        number_of_images = request.args.get('number_of_images')  # Corrected parameter name
-        capture_time = request.args.get('capture_time')  # Corrected parameter name
+        ID = request.args.get('ID')
+        Timeframe = int(request.args.get('Timeframe'))  # Convert to int
+        Longitude = float(request.args.get('Longitude'))  # Convert to float
+        Latitude = float(request.args.get('Latitude'))  # Convert to float
+        NumberOfImages = int(request.args.get('NumberOfImages'))  # Convert to int
 
         # Check if any of the parameters are missing
-        if None in [action, location, number_of_images, capture_time]:
+        if None in [ID, Timeframe, Longitude, Latitude, NumberOfImages]:
             return jsonify({"message": "Missing one or more required parameters"}), 400
 
         response_data = {
-            "action": action,
-            "location": location,
-            "number_of_images": number_of_images,
-            "capture_time": capture_time
+            "ID": ID,
+            "Timeframe": Timeframe,
+            "Longitude": Longitude,
+            "Latitude": Latitude,
+            "NumberOfImages": NumberOfImages
         }
 
         return jsonify(response_data)

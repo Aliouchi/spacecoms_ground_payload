@@ -1,5 +1,4 @@
 //URL input will be of Payload OPS Ground Center 
-
 //Test Status is 200 Ok
 pm.test("Status == 200",function()
 {
@@ -16,6 +15,35 @@ pm.test("Content-type == JSON", function () {
 pm.test("Response Body == JSON",function()
 {
     pm.response.to.be.json;
+});
+
+
+//Verify the key values present in the response 
+pm.test("Verify Response JSON Structure", function () {
+    const expectedResponse = {
+        "ID": "20231021_212435",
+        "Timeframe": 500,
+        "Longitude": 2.3522,
+        "Latitude": 48.8566 ,
+        "NumberOfImages" : 5
+    };
+
+    const responseBody = pm.response.json();
+
+    pm.expect(responseBody).to.eql(expectedResponse);
+});
+
+
+//Verify the absent keys 
+pm.test("Check if any unexpected key does not exist", function () {
+    const expectedKeys = ["ID", "Timeframe", "Longitude", "Latitude", "NumberOfImages"];
+    const responseKeys = Object.keys(pm.response.json());
+
+    responseKeys.forEach((key) => {
+        if (!expectedKeys.includes(key)) {
+            pm.expect(pm.response.json()).to.not.have.key(key);
+        }
+    });
 });
 
 // Test for successful JSON parsing
@@ -59,3 +87,37 @@ pm.test("Missing or Required Fields", function () {
 pm.test("Response time is less than 500ms", function () {
     pm.expect(pm.response.responseTime).to.be.below(500);
 });
+
+//Error handling to verify that the error structure is as expected
+pm.test("Error structure is correct", function () {
+    const jsonData = pm.response.json();
+    if (jsonData.error) {
+        pm.expect(jsonData.error).to.have.keys(['code', 'message']);
+    }
+});
+
+pm.test("Verify ID Format", function () {
+    const responseJson = pm.response.json();
+    pm.expect(responseJson.ID).to.match(/^\d{8}_\d{6}$/);
+});
+
+pm.test("Verify Timeframe is a Number", function () {
+    const responseJson = pm.response.json();
+    pm.expect(responseJson.Timeframe).to.equal(500);
+});
+
+pm.test("Verify Longitude is a Number", function () {
+    const responseJson = pm.response.json();
+    pm.expect(responseJson.Longitude).to.equal(2.3522);
+});
+
+pm.test("Verify Latitude is a Number", function () {
+    const responseJson = pm.response.json();
+    pm.expect(responseJson.Latitude).to.equal(48.8566);
+});
+
+pm.test("Verify NumberOfImages is a Number", function () {
+    const responseJson = pm.response.json();
+    pm.expect(responseJson.NumberOfImages).to.equal(5);
+});
+
