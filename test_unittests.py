@@ -9,7 +9,7 @@ import flask
 import pytest
 
 import model
-from app import create_app
+from app import Request, create_app
 
 
 @pytest.fixture(scope='module')
