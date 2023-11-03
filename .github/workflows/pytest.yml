@@ -32,6 +32,6 @@ jobs:
         pip install flask
         pip install pytest
     - name: Running Test Suite
-      working-directory: ./tests/
+      working-directory: ./
       run: |
         python -m pytest test_unit_tests.py
