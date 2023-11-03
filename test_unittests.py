@@ -7,7 +7,9 @@ import unittest
 
 import flask
 import pytest
-from app import Request, create_app
+
+import model
+from app import create_app
 
 
 @pytest.fixture(scope='module')
