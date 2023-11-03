@@ -34,4 +34,4 @@ jobs:
     - name: Running Test Suite
       working-directory: ./
       run: |
-        python -m pytest test_unit_tests.py
+        python -m pytest test_unittests.py
