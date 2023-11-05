@@ -31,15 +31,6 @@ class Request:
         """A method converting the Request object into a printable string"""
         return f"Request #{self.id}: (longitude: {self.longitude}, latitude: {self.latitude}, number_of_images: {self.number_of_images})"
 
-    def total_check(self, spacecraft):
-        """A method to verify the overall request logic (runs all the individual checks)"""
-        flag = False
-
-        if(distance_check(spacecraft) == True, image_check(spacecraft) == True, id_check(spacecraft) == True, date_time_check(spacecraft) == True):
-            flag = True
-            return flag
-        else:
-            return flag
 
     def distance_check(self, spacecraft):
         """A method to verify distance from spacecraft to the point we want to take picture"""
@@ -105,6 +96,16 @@ class Request:
             return True
         else:
             return False
+    
+        def total_check(self, spacecraft):
+        """A method to verify the overall request logic (runs all the individual checks)"""
+        flag = False
+
+        if(distance_check(spacecraft) == True, image_check(spacecraft) == True, id_check(spacecraft) == True, date_time_check(spacecraft) == True):
+            flag = True
+            return flag
+        else:
+            return flag
 
 def create_app():
     app = Flask(__name__)
