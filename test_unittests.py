@@ -8,7 +8,7 @@ import unittest
 import flask
 import pytest
 
-import model
+#import model
 from app import Request, create_app
 
 
@@ -45,4 +45,49 @@ class TestRequestClass(unittest.TestCase):
 
         #TODO: to be implemented
 
-        assert true
+    def test_distance_check_within_max_distance(self):
+     request = Request("20231019_233715",0.00,0.00,10)
+     spacecraft = Spacecraft(0.00,0.00)
+     self.assertTrue(request.distance_check(spacecraft))
+     
+     
+    def test_distance_check_beyond_max_distance(self):
+        request = Request("20231019_233715", 0.00, 0.00, 10)
+        spacecraft = Spacecraft(0.01, 0.01)
+        self.assertFalse(request.distance_check(spacecraft))
+
+    def test_images_check_valid_number(self):
+        request = Request("20231019_233715", 0.00, 0.00, 10)
+        self.assertTrue(request.images_check())
+
+    def test_images_check_invalid_number(self):
+        request = Request("20231019_233715", 0.00, 0.00, 100)
+        self.assertFalse(request.images_check())
+
+    def test_id_check_valid_format(self):
+        request = Request("20231019_233715", 0.00, 0.00, 10)
+        self.assertTrue(request.id_check())
+
+    def test_id_check_invalid_format(self):
+        request = Request("20231019_2337X5", 0.00, 0.00, 10)
+        self.assertFalse(request.id_check())
+
+    def test_date_time_check_valid_date_time(self):
+        request = Request("20231019_233715", 0.00, 0.00, 10)
+        self.assertTrue(request.date_time_check())
+
+    def test_date_time_check_invalid_date_time(self):
+        request = Request("20231345_256789", 0.00, 0.00, 10)
+        self.assertFalse(request.date_time_check())
+
+    def test_total_check_valid_request(self):
+        request = Request("20231019_233715", 0.00, 0.00, 10)
+        spacecraft = Spacecraft(0.00, 0.00)
+        self.assertTrue(request.total_check(spacecraft))
+
+    def test_total_check_invalid_request(self):
+        request = Request("20231345_256789", 0.01, 0.01, 100)
+        spacecraft = Spacecraft(0.00, 0.00)
+        self.assertFalse(request.total_check(spacecraft))
+
+       
