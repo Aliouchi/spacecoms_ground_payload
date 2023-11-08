@@ -98,7 +98,7 @@ pm.test("Error structure is correct", function () {
 
 pm.test("Verify ID Format", function () {
     const responseJson = pm.response.json();
-    pm.expect(responseJson.ID).to.match(/^\d{8}_\d{6}$/);
+    pm.expect(responseJson.ID).to.match(/^\d{4}\d{2}\d{2}_\d{2}\d{2}\d{2}$/);
 });
 
 pm.test("Verify Timeframe is a Number", function () {
