@@ -33,4 +33,4 @@ jobs:
         pip install pytest
     - name: Running Test Suite
       run: |
-        python -m pytest test_unit_tests.py
+        python -m pytest test_unittests.py
