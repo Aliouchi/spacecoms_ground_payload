@@ -1,5 +1,5 @@
 exclude: |
-  ^Dockerfile\.pages$
+  '^Dockerfile\.pages$'
 
 ci:
   autoupdate_commit_msg: "chore: update pre-commit hooks"
