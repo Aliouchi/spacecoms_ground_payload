@@ -18,15 +18,15 @@
   - Jignesh Patel
 
 ## Objective and System Requirements
-  Our primary objective within this module is to create a logical bridge which is going to serve as a filter between Science Center Payload Operations Module and Ground Station Command and Data Handling Module. In this context, we aim to: 
+  Our primary objective within this module is to create a logical bridge which is going to serve as a filter between Science Center Payload Operations Module and Ground Station Command and Data Handling Module. In this context, we aim to:
   - Intercept all the data packets sent out by the Science Center Payload Operations Module and going through our subsystem.
   - Validate the integrity of all captured data packets based on the data structure, destination, and checksums.
   - Verify whether the requests inside the data packet are reasonable and performable by communticating with the Ground Station Command and Data Handling Module.
   - Flag the data packets as valid if they pass the checks and forward them to the Ground Station Command and Data Handling Module for further routing.
   - Flag the data packets as invalid if they are such and return them back to the Science Center Payload Operations Module for restructuring.
   - Once the data packet is forwarded to the Ground Station Command and Data Handling Module have an open port to receive a feedback on data delivery.
-  - Despite the data being delivered successfully or lost in transmition, pass this response to the Science Center Payload Operations Module.
-  - Log all actions, steps, transmissions and communications performed by the module to keep track of all the module's actions. 
+  - Despite the data being delivered successfully or lost in transmission, pass this response to the Science Center Payload Operations Module.
+  - Log all actions, steps, transmissions and communications performed by the module to keep track of all the module's actions.
 
 ## Getting Started
   To get a feel of our Ground Station Payload Operations module, please feel free to download the latest release by navigating to the releases tab and selecting the freshest version.
@@ -40,17 +40,17 @@
   ```
   git clone https://github.com/Aliouchi/spacecoms_ground_payload.git
   ```
-  
+
   - [ ] Step 2. Make sure you have up-to-date python installed on your workstation (Should be > 3.10).
   ```
   python --version
   ```
-  
+
   - [ ] Step 3. Install all the required packages for our project.
   ```
   pip install -r requirements.txt
   ```
-  
+
   - [ ] Step 4. Running the application.
   ```
   flask --app app.py run --debug
@@ -66,7 +66,7 @@
   - Science Center Payload Operations [Module 7](https://github.com/tylerscheifley/CSCN73030_PC_PayloadOps_Group2)
 
 ## Contact Us
-  Should you have any questions, suggestions, or encounter any issues while working with our module, please don't hesitate to raise an issue stating your question or feel free to reach out to any of our team members listed above. 
+  Should you have any questions, suggestions, or encounter any issues while working with our module, please don't hesitate to raise an issue stating your question or feel free to reach out to any of our team members listed above.
   We are committed to develop as the best version of itself and value your input.
 
 ## Thank you for your interest in our project and for reading this file!
