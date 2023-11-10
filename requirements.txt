@@ -1,4 +1,6 @@
-Flask==2.2.1
+Flask==3.0.0
+pre-commit
 pylint
 pytest
-pre-commit
+requests
+Werkzeug==3.0.0
