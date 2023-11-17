@@ -1,8 +1,8 @@
 Flask==3.0.0
+Flask-PyMongo
 pre-commit
 pylint
+pymongo
 pytest
 requests
 Werkzeug==3.0.0
-pymongo
-Flask-PyMongo
