@@ -1,12 +1,56 @@
-"""Running Flask Server"""
-
+"""run flask and the database"""
 from __future__ import annotations
 
-from flask import Flask
+from flask import Flask, jsonify, request
+from flask_pymongo import PyMongo
 
+# ImageRequest structure
+
+class ImageRequest:
+    """class structure for the image request"""
+    def __init__(self, identifier, latitude, longitude, number_of_images, status):
+        self.identifier = identifier
+        self.latitude = latitude
+        self.longitude = longitude
+        self.number_of_images = number_of_images
+        self.status = status
 
 def create_app():
-    """A function creating and starting an app on the flask server"""
+    """this module will setup flask in addition to Mongo db database"""
     app = Flask(__name__)
+    app.config["MONGO_URI"] = "mongodb://localhost:27017/payloadOpsDb"
+
+    mongo = PyMongo(app)
+
+    @app.route('/add_request', methods=['POST'])
+
+    def add_request():
+        """route that adds a new request with the specified structure to the database"""
+        data = request.json
+        new_request = ImageRequest(data['identifier'], data['latitude'],
+                                    data['longitude'], data['number_of_images'],
+                                      data['status'])
+        mongo.db.requests.insert_one(new_request.__dict__)
+        return jsonify({'message': 'Request added successfully'})
+# get request by id
+    @app.route('/get_requests')
+    def get_requests():
+        """route that get all requests from the database"""
+        requests = mongo.db.requests.find()
+        request_list = []
+        for req in requests:
+            req['_id'] = str(req['_id'])
+            request_list.append(req)
+        return jsonify(request_list)
+
+
 
     return app
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True)
+
+# update status by id
+# check the status ints
+# add delete
