@@ -1,35 +1,24 @@
 import subprocess
 
 def run_postman_tests(collection_file):
-    # Construct the Newman command
-    command = [
-        "newman",
-        "run",
-        collection_file
-       
-    ]
-
     try:
-        # Run Newman using subprocess
-        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        # Replace 'newman' with the actual path to the Newman executable if needed
+        newman_command = ['newman', 'run', collection_file]
 
-        # Check if all tests passed based on the exit code
-        if result.returncode == 0:
-            print("All tests passed!")
-            return True
-        else:
-            print("Some tests failed.")
-            return False
+        # Run Newman as a subprocess
+        subprocess.run(newman_command, check=True)
 
+        return True
     except subprocess.CalledProcessError as e:
-        # Handle any errors that occur during the Newman execution
-        print(f"Error running Newman: {e}")
+        print(f"Error running Postman tests: {e}")
         return False
 
-# Example usage
-collection_file ='PostmanCollection.json'
+# Usage
+if __name__ == '__main__':
+    collection_file_path = "PostmanCollection.json"
+    postman_test_result = run_postman_tests(collection_file_path)
 
-
-result = run_postman_tests(collection_file)
-
-# Use the 'result' variable as needed in your application
+    if postman_test_result:
+        print("Postman tests passed.")
+    else:
+        print("Postman tests failed.")
