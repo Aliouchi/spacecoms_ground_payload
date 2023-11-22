@@ -56,7 +56,7 @@ def post_request_endpoint():
 
         requests.post(M7_URL, json=status_code,timeout=500)
         if status_code == 0:
-            requests.post(M5_URL, json=data)
+            requests.post(M5_URL, json=data,timeout=500)
             return jsonify({"message": "Valid Request"}), 200
         return jsonify({"message": "Invalid Request"}), 400
 
