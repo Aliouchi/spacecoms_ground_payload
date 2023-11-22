@@ -1,6 +1,11 @@
+"""A module containing the call to postman tests"""
+from __future__ import annotations
+
 import subprocess
 
+
 def run_postman_tests(collection_file):
+    """A method running postman tests"""
     try:
         # Replace 'newman' with the actual path to the Newman executable if needed
         newman_command = ['newman', 'run', collection_file]
@@ -15,10 +20,10 @@ def run_postman_tests(collection_file):
 
 # Usage
 if __name__ == '__main__':
-    collection_file_path = "PostmanCollection.json"
-    postman_test_result = run_postman_tests(collection_file_path)
+    COLLECTION_FILE_PATH = "PostmanCollection.json"
+    POSTMAN_TEST_RESULT = run_postman_tests(COLLECTION_FILE_PATH)
 
-    if postman_test_result:
+    if POSTMAN_TEST_RESULT:
         print("Postman tests passed.")
     else:
         print("Postman tests failed.")

@@ -2,11 +2,14 @@
 This module contains the Flask application for handling requests and images.
 """
 
-from flask import Flask, jsonify, request
+from __future__ import annotations
+
 import requests
-from logic_checks import  total_check
-from TestingPostman import run_postman_tests
+from flask import Flask, jsonify, request
+
+from logic_checks import total_check
 from spacecraft_telem import Spacecraft
+from TestingPostman import run_postman_tests
 
 app = Flask(__name__)
 
