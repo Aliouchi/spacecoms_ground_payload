@@ -1,82 +1,83 @@
+"""
+This module contains the Flask application for handling requests and images.
+"""
+
 from flask import Flask, jsonify, request
 import requests
-from logic_checks import *
-from spacecraft_telem import *
-from TestingPostman import *
+from logic_checks import  total_check
+from TestingPostman import run_postman_tests
+from spacecraft_telem import Spacecraft
+
 app = Flask(__name__)
 
-spacecraft = Spacecraft(identifier='ISS',latitude=2.55,longitude=5.66) #TBD
-db_URL = 'http://example.com/post/add_request' 
-M7URL = 'http://example.com/post/status'
-M5URL = 'http://example.com/post/receive'
-M7ImagesURL = 'http://example.com/payloadimage'
+DB_URL = 'http://example.com/post/add_request'
+M7_URL = 'http://example.com/post/status'
+M5_URL = 'http://example.com/post/receive'
+M7_IMAGES_URL = 'http://example.com/payloadimage'
+
+spacecraft = Spacecraft(identifier='ISS', latitude=2.55, longitude=5.66)  # TBD
 
 @app.route('/request', methods=['POST'])
-def postRequestEndpoint():
-
+def post_request_endpoint():
+    """
+    Handle the '/request' endpoint for processing requests.
+    """
     try:
         data = request.json  # Retrieve JSON data from the request body
-      
-        ID = request.args.get('ID')
-        Longitude = float(request.args.get('Longitude'))
-        Latitude = float(request.args.get('Latitude'))
-        NumberOfImages = int(request.args.get('NumberOfImages'))
+
+        identifier = request.args.get('ID')
+        longitude = float(request.args.get('Longitude'))
+        latitude = float(request.args.get('Latitude'))
+        number_of_images = int(request.args.get('NumberOfImages'))
 
         # Check if any of the parameters are missing
-        if None in [ID, Longitude, Latitude, NumberOfImages]:
+        if None in [identifier, longitude, latitude, number_of_images]:
             return jsonify({"message": "Missing one or more required parameters"}), 400
 
-        #Save the current request data to MongoDB
-        
+        # Save the current request data to MongoDB
         collection_file = "PostmanCollection.json"
-        postMan_testResult = run_postman_tests(collection_file)
-       
-        if postMan_testResult:
-            final_result = total_check(data,spacecraft)
-            if final_result:
-                status_code = 0
-            else:
-                status_code=1
+        postman_test_result = run_postman_tests(collection_file)
+
+        if postman_test_result:
+            final_result = total_check(data, spacecraft)
+            status_code = 0 if final_result else 1
         else:
-            status_code=2
-        
+            status_code = 2
+
         response_data = {
-            "ID": ID,
-            "Longitude": Longitude,
-            "Latitude": Latitude,
-            "NumberOfImages": NumberOfImages, 
+            "ID": identifier,
+            "Longitude": longitude,
+            "Latitude": latitude,
+            "NumberOfImages": number_of_images,
             "StatusCode": status_code
-            
         }
-        req = requests.post(db_URL,json=response_data)
-       
-     
-            
-        requests.post(M7URL,json=status_code)
-        if status_code ==0: 
-            requests.post(M5URL, json=data)
-            return jsonify({"message": "Valid Request"})
-        else: 
-               return jsonify({"message": "Invalid Request"}), 400
-           
+
+        requests.post(DB_URL, json=response_data,timeout=500)
+
+        requests.post(M7_URL, json=status_code,timeout=500)
+        if status_code == 0:
+            requests.post(M5_URL, json=data)
+            return jsonify({"message": "Valid Request"}), 200
+        return jsonify({"message": "Invalid Request"}), 400
+
     except Exception as e:
-        return jsonify({"message": "Error processing the request"}), 400
-
-
+        return jsonify({"message": f"Error processing the request: {str(e)}"}), 400
 
 @app.route('/images', methods=['POST'])
-def postImagesEndpoint():
+def post_images_endpoint():
+    """
+    Handle the '/images' endpoint for processing images.
+    """
     try:
         data = request.json
 
-        forward_response = requests.post(M7ImagesURL, json=data)
+        forward_response = requests.post(M7_IMAGES_URL, json=data, timeout=500)
         forward_response.raise_for_status()
 
         return jsonify({"message": "Images processed successfully"}), 200
 
     except requests.exceptions.RequestException as e:
         return jsonify({"message": f"Error processing images: {str(e)}"}), 500
-    
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
