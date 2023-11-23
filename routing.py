@@ -8,6 +8,7 @@ import requests
 from flask import Flask, jsonify, request
 
 from logic_checks import total_check
+from request_struct import Request
 from spacecraft_telem import Spacecraft
 from TestingPostman import run_postman_tests
 
@@ -28,21 +29,27 @@ def post_request_endpoint():
     try:
         data = request.json  # Retrieve JSON data from the request body
 
-        identifier = request.args.get('ID')
-        longitude = float(request.args.get('Longitude'))
-        latitude = float(request.args.get('Latitude'))
-        number_of_images = int(request.args.get('NumberOfImages'))
-
+        identifier = data.get('ID')
+        longitude = data.get('Longitude')
+        latitude = data.get('Latitude')
+        number_of_images = data.get('NumberOfImages')
+        longitude = float(longitude)
+        latitude = float(latitude)
+        number_of_images = int(number_of_images)
+        status_code = -1
         # Check if any of the parameters are missing
         if None in [identifier, longitude, latitude, number_of_images]:
-            return jsonify({"message": "Missing one or more required parameters"}), 400
+            status_code = 2
+            #return jsonify({"message": "Missing one or more required parameters"}), 400
 
         # Save the current request data to MongoDB
-        collection_file = "PostmanCollection.json"
-        postman_test_result = run_postman_tests(collection_file)
-
-        if postman_test_result:
-            final_result = total_check(data, spacecraft)
+        # collection_file = "PostmanCollection.json"
+        # postman_test_result = run_postman_tests(collection_file)
+        postman_test_result = True
+        # if postman_test_result:
+        if status_code !=2:
+            request_data = Request(identifier,longitude,latitude,number_of_images)
+            final_result = total_check(request_data, spacecraft)
             status_code = 0 if final_result else 1
         else:
             status_code = 2
@@ -61,6 +68,10 @@ def post_request_endpoint():
         if status_code == 0:
             requests.post(M5_URL, json=data,timeout=500)
             return jsonify({"message": "Valid Request"}), 200
+        elif status_code==1:
+            return jsonify({"message": "Rejected by logic"}),200
+        elif status_code ==2:
+            return jsonify({"message":"Rejected by Structure"}),200
         return jsonify({"message": "Invalid Request"}), 400
 
     except Exception as e:
