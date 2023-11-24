@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "5edcbed5-53b1-4a14-bbe9-0718903f30c6",
+		"name": "PayLoad OPS - Ground Station",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "30629158",
+		"_collection_link": "https://payloadops.postman.co/workspace/PayLoad-Ground-Station---API-Ha~fc4aa5a9-92ba-4a63-bacc-826a1c02500f/collection/27710401-5edcbed5-53b1-4a14-bbe9-0718903f30c6?action=share&source=collection_link&creator=30629158"
+	},
+	"item": [
+		{
+			"name": "validateJSON",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//URL input will be of Payload OPS Ground Center ",
+							"//Test Status is 200 Ok",
+							"pm.test(\"Status == 200\",function()",
+							"{",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"//Verify the response has data type as valid JSON Content-type",
+							"pm.test(\"Content-type == JSON\", function () {",
+							"    pm.response.to.have.header(\"Content-type\", \"application/json\");",
+							"});",
+							"",
+							"",
+							"//Verify the response body has valid JSON type",
+							"pm.test(\"Response Body == JSON\",function()",
+							"{",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"",
+							"//Verify the key values present in the response ",
+							"pm.test(\"Verify Response JSON Structure\", function () {",
+							"    const responseBody = pm.response.json();",
+							"",
+							"    pm.expect(typeof responseBody.ID).to.eql('string');",
+							"    pm.expect(typeof responseBody.Longitude).to.eql('number');",
+							"    pm.expect(typeof responseBody.Latitude).to.eql('number');",
+							"    pm.expect(Number.isInteger(responseBody.NumberOfImages)).to.be.true;",
+							"});",
+							"",
+							"//Verify the absent keys ",
+							"pm.test(\"Check if any unexpected key does not exist\", function () {",
+							"    const expectedKeys = [\"ID\", \"Longitude\", \"Latitude\", \"NumberOfImages\"];",
+							"    const responseKeys = Object.keys(pm.response.json());",
+							"",
+							"    responseKeys.forEach((key) => {",
+							"        if (!expectedKeys.includes(key)) {",
+							"            pm.expect(pm.response.json()).to.not.have.key(key);",
+							"        }",
+							"    });",
+							"});",
+							"",
+							"",
+							"// Test for handling invalid JSON",
+							"pm.test(\"Handling Invalid JSON\", function () {",
+							"    var invalidRequest = 'This is not JSON';",
+							"    ",
+							"    try {",
+							"        var parsedData = JSON.parse(invalidRequest);",
+							"        pm.expect(parsedData).to.be.null;",
+							"    } catch (e) {",
+							"        // If JSON parsing fails, this is expected",
+							"        console.log(\" Error Message: Invalid JSON request\",e); ",
+							"",
+							"    }",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"//Error handling to verify that the error structure is as expected",
+							"pm.test(\"Error structure is correct\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    if (jsonData.error) {",
+							"        pm.expect(jsonData.error).to.have.keys(['code', 'message']);",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Verify ID Format\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.ID).to.match(/^\\d{8}_\\d{6}$/);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200 or 400\", function () {",
+							"    const expectedStatusCodes = [200, 400,405,404];",
+							"    pm.expect(pm.response.code).to.be.oneOf(expectedStatusCodes, `Expected response status to be one of ${expectedStatusCodes} but got ${pm.response.code}.`);",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "charset",
+						"value": "utf-8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:5000/request?ID=20231021_212435&Longitude=2.3522&Latitude=48.8566&NumberOfImages=5",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"request"
+					],
+					"query": [
+						{
+							"key": "ID",
+							"value": "20231021_212435",
+							"description": "Id in YYYYMMDD_HHMMSS format"
+						},
+						{
+							"key": "Longitude",
+							"value": "2.3522",
+							"description": "Longitude in \"float\" format"
+						},
+						{
+							"key": "Latitude",
+							"value": "48.8566",
+							"description": "Latitude in \"float\" format"
+						},
+						{
+							"key": "NumberOfImages",
+							"value": "5",
+							"description": "NumberofImages in Int format\n"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
