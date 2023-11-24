@@ -1,9 +1,0 @@
-POST http://127.0.0.1:8080/request HTTP/1.1
-Content-Type: application/json
-
-{
-    "ID": "20231020_123012",
-    "Longitude": "2.56",
-    "Latitude": "5.66",
-    "NumberOfImages": "2"
-}
