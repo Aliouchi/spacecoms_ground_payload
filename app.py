@@ -85,16 +85,16 @@ def create_app():
 #delete a request
     @app.route('/delete_request', methods=['DELETE'])
     def delete_request():
-            """route to delete a request using a custom identifier"""
-            data = request.json
-            custom_id = data.get('identifier')
+        """route to delete a request using a custom identifier"""
+        data = request.json
+        custom_id = data.get('identifier')
 
-            result = mongo.db.requests.delete_one({'identifier': custom_id})
+        result = mongo.db.requests.delete_one({'identifier': custom_id})
 
-            if result.deleted_count:
-                return jsonify({'message': 'Request deleted successfully'})
-            else:
-                return jsonify({'error': 'No request found with the provided identifier'}), 404
+        if result.deleted_count:
+            return jsonify({'message': 'Request deleted successfully'})
+        else:
+            return jsonify({'error': 'No request found with the provided identifier'}), 404
 
     return app
 
