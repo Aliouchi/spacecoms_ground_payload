@@ -11,6 +11,7 @@ from app import ImageRequest
 from logic_checks import total_check
 from request_struct import Request
 from spacecraft_telem import Spacecraft
+
 # from TestingPostman import run_postman_tests
 
 app = Flask(__name__)
@@ -60,20 +61,20 @@ def post_request_endpoint():
 
         # Saving the record to the database
         im_req = ImageRequest(identifier, longitude, latitude, number_of_images, status_code)
-        requests.post(DB_URL + "/add_request", json=im_req.__dict__)
+        requests.post(DB_URL + "/add_request", json=im_req.__dict__, timeout = 500)
 
         # Returning the status code to Module #7
         status_response = {
             "ID" : identifier,
             "Status" : status_code
         }
-        requests.post(M7_URL + "/Status", json=status_response)
+        requests.post(M7_URL + "/Status", json=status_response, timeout = 500)
 
         # TODO: Need to forward the request to Module #5 Objective for Sprint #4
 
         # Forming the request response to return to Module #7
         if status_code == 0:
-            requests.post(M5_URL, json=data,timeout=500)
+            requests.post(M5_URL, json = data, timeout = 500)
             return jsonify({"message": "Valid Request"}), 200
         elif status_code == 1:
             return jsonify({"message": "Rejected by logic"}),200
