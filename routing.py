@@ -91,36 +91,36 @@ def post_request_endpoint():
 
 
 
-        # if requests.post('https://eon9k7ryz3jzzbf.m.pipedream.net', json=status_code,timeout=500):
-        #     return jsonify({"message": "Status_code sent successfully", "status_code": status_code}), 200
+        if requests.post(M7_URL, json=status_code,timeout=500):
+            return jsonify({"message": "Status_code sent successfully", "status_code": status_code}), 200
 
-    #     if status_code == 0:
-    #         requests.post('https://eo97tu4xhnko5q3.m.pipedream.net', json=data,timeout=500)
-    #         return jsonify({"message": "Valid Request"}), 200
-    #     elif status_code==1:
-    #         return jsonify({"message": "Rejected by logic"}),200
-    #     elif status_code ==2:
-    #         return jsonify({"message":"Rejected by Structure"}),200
-    #     return jsonify({"message": "Invalid Request"}), 400
+        if status_code == 0:
+            requests.post(M5_URL, json=data,timeout=500)
+            return jsonify({"message": "Valid Request"}), 200
+        elif status_code==1:
+            return jsonify({"message": "Rejected by logic"}),200
+        elif status_code ==2:
+            return jsonify({"message":"Rejected by Structure"}),200
+        return jsonify({"message": "Invalid Request"}), 400
 
     except Exception as e:
         return jsonify({"message": f"Error processing the request: {str(e)}"}), 400
 
-# @app.route('/images', methods=['POST'])
-# def post_images_endpoint():
-#     """
-#     Handle the '/images' endpoint for processing images.
-#     """
-#     try:
-#         data = request.json
+@app.route('/images', methods=['POST'])
+def post_images_endpoint():
+    """
+    Handle the '/images' endpoint for processing images.
+    """
+    try:
+        data = request.json
 
-#         forward_response = requests.post(M7_IMAGES_URL, json=data, timeout=500)
-#         forward_response.raise_for_status()
+        forward_response = requests.post(M7_IMAGES_URL, json=data, timeout=500)
+        forward_response.raise_for_status()
 
-#         return jsonify({"message": "Images processed successfully"}), 200
+        return jsonify({"message": "Images processed successfully"}), 200
 
-#     except requests.exceptions.RequestException as e:
-#         return jsonify({"message": f"Error processing images: {str(e)}"}), 500
+    except requests.exceptions.RequestException as e:
+        return jsonify({"message": f"Error processing images: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
