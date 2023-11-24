@@ -27,10 +27,10 @@ def create_app():
     def add_request():
         """route that adds a new request with the specified structure to the database"""
         data = request.json
-        new_request = ImageRequest(data['identifier'], data['latitude'],
-                                    data['longitude'], data['number_of_images'],
-                                      data['status'])
-        mongo.db.requests.insert_one(new_request.__dict__)
+        # new_request = ImageRequest(data['identifier'], data['latitude'],
+        #                             data['longitude'], data['number_of_images'],
+        #                               data['status'])
+        mongo.db.requests.insert_one(data)
         return jsonify({'message': 'Request added successfully'})
 # get request by id
     @app.route('/get_requests')

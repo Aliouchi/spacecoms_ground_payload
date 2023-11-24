@@ -5,43 +5,22 @@ This module contains the Flask application for handling requests and images.
 from __future__ import annotations
 
 import requests
-from flask import Flask, g, jsonify, request
+from flask import Flask, jsonify, request
 
+from app import ImageRequest
 from logic_checks import total_check
 from request_struct import Request
 from spacecraft_telem import Spacecraft
-from TestingPostman import run_postman_tests
+# from TestingPostman import run_postman_tests
 
 app = Flask(__name__)
 
-DB_URL = 'http://example.com/post/add_request'
-M7_URL = 'http://example.com/post/status'
-M5_URL = 'http://example.com/post/receive'
-M7_IMAGES_URL = 'http://example.com/payloadimage'
+DB_URL = 'http://127.0.0.1:5000'
+M7_URL = 'http://example.com'
+M5_URL = 'http://example.com'
 
-spacecraft = Spacecraft(identifier='ISS', latitude=2.55, longitude=5.66)  # TBD
-@app.route('/receive', methods=['POST'])
-def telemetry_endpoint():
-    try:
-        data = request.json
+spacecraft = Spacecraft(identifier='ISS', latitude=5.66, longitude=2.55)  # TBD
 
-        identifier = data.get('ID')
-        longitude = data.get('Longitude')
-        latitude = data.get('Latitude')
-
-        if None in [identifier, longitude, latitude]:
-            return jsonify({"message": "Missing one or more required parameters"}), 400
-
-        spacecraft_instance = Spacecraft(identifier, float(longitude), float(latitude))
-
-        # Store the spacecraft instance in the global context variable 'g'
-        g.spacecraft_instance = spacecraft_instance
-
-        return jsonify({"message": "Telemetry data received successfully"}), 200
-
-
-    except Exception as e:
-        return jsonify({"message": f"Error processing telemetry data: {str(e)}"}), 400
 @app.route('/request', methods=['POST'])
 def post_request_endpoint():
     """
@@ -50,23 +29,25 @@ def post_request_endpoint():
     try:
         data = request.json  # Retrieve JSON data from the request body
 
+        # Parse Request contents to string variables
         identifier = data.get('ID')
         longitude = data.get('Longitude')
         latitude = data.get('Latitude')
         number_of_images = data.get('NumberOfImages')
+
+        # Parse the strings parsed from the Request into the required datatypes
         longitude = float(longitude)
         latitude = float(latitude)
         number_of_images = int(number_of_images)
+
         status_code = -1
         # Check if any of the parameters are missing
         if None in [identifier, longitude, latitude, number_of_images]:
             status_code = 2
-            #return jsonify({"message": "Missing one or more required parameters"}), 400
 
-        # Save the current request data to MongoDB
+        # TODO: Need to run postman tests here. Objective for Sprint #4
         # collection_file = "PostmanCollection.json"
         # postman_test_result = run_postman_tests(collection_file)
-        #postman_test_result = True
         # if postman_test_result:
 
         if status_code !=2:
@@ -75,31 +56,28 @@ def post_request_endpoint():
             if final_result:
                 status_code = 0
             else:
-                status_code =1
+                status_code = 1
 
+        # Saving the record to the database
+        im_req = ImageRequest(identifier, longitude, latitude, number_of_images, status_code)
+        requests.post(DB_URL + "/add_request", json=im_req.__dict__)
 
-        response_data = {
-            "ID": identifier,
-            "Longitude": longitude,
-            "Latitude": latitude,
-            "NumberOfImages": number_of_images,
-            "StatusCode": status_code
+        # Returning the status code to Module #7
+        status_response = {
+            "ID" : identifier,
+            "Status" : status_code
         }
+        requests.post(M7_URL + "/Status", json=status_response)
 
-        requests.post(DB_URL, json=response_data,timeout=500)
+        # TODO: Need to forward the request to Module #5 Objective for Sprint #4
 
-
-
-
-        if requests.post(M7_URL, json=status_code,timeout=500):
-            return jsonify({"message": "Status_code sent successfully", "status_code": status_code}), 200
-
+        # Forming the request response to return to Module #7
         if status_code == 0:
             requests.post(M5_URL, json=data,timeout=500)
             return jsonify({"message": "Valid Request"}), 200
-        elif status_code==1:
+        elif status_code == 1:
             return jsonify({"message": "Rejected by logic"}),200
-        elif status_code ==2:
+        elif status_code == 2:
             return jsonify({"message":"Rejected by Structure"}),200
         return jsonify({"message": "Invalid Request"}), 400
 
@@ -114,7 +92,7 @@ def post_images_endpoint():
     try:
         data = request.json
 
-        forward_response = requests.post(M7_IMAGES_URL, json=data, timeout=500)
+        forward_response = requests.post(M7_URL + "/images", json=data, timeout=500)
         forward_response.raise_for_status()
 
         return jsonify({"message": "Images processed successfully"}), 200
