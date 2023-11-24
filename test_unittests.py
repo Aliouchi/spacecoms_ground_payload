@@ -2,28 +2,31 @@
 
 from __future__ import annotations
 
-import os
 import unittest
 
-#import flask
-import pytest
-
-from app import create_app
+# from app import create_app
 from logic_checks import (date_time_check, distance_check, id_check,
                           images_check, total_check)
 from request_struct import Request
 from spacecraft_telem import Spacecraft
 
+# import os
+# from flask import Flask, jsonify, request
+# from flask_pymongo import PyMongo
 
-@pytest.fixture(scope='module')
-def test_client():
-    """Initializing pytest fixture for appliacation run for flask unit tests"""
-    os.environ['CONFIG_TYPE'] = 'config.TestingConfig'
-    flask_app = create_app()
+#import flask
 
-    with flask_app.test_client() as testing_client:
-        with flask_app.app_context():
-            yield testing_client
+
+
+# @pytest.fixture(scope='module')
+# def test_client():
+#     """Initializing pytest fixture for appliacation run for flask unit tests"""
+#     os.environ['CONFIG_TYPE'] = 'config.TestingConfig'
+#     flask_app = create_app()
+
+#     with flask_app.test_client() as testing_client:
+#         with flask_app.app_context():
+#             yield testing_client
 
 
 class TestRequestClass(unittest.TestCase):
