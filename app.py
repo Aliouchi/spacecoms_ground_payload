@@ -52,11 +52,13 @@ def create_app():
         if not custom_id:
             return jsonify({'error': 'No identifier provided'}), 400
 
-        request_data = mongo.db.requests.find_one({'identifier': custom_id})
+        requests_cursor = mongo.db.requests.find({'identifier': custom_id})
+        requests_list = list(requests_cursor)
 
-        if request_data:
-            request_data['_id'] = str(request_data['_id'])
-            return jsonify(request_data)
+        if requests_list:
+            for request_data in requests_list:
+                request_data['_id'] = str(request_data['_id'])
+            return jsonify(requests_list)
         else:
             return jsonify({'error': 'No request found with the provided identifier'}), 404
 
