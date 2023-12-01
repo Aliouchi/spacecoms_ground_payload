@@ -93,8 +93,8 @@ def post_images_endpoint():
     try:
         data = request.json
 
-        forward_response = requests.post(M7_URL + "/images", json=data, timeout=500)
-        forward_response.raise_for_status()
+        requests.post(M7_URL + "/images", json=data, timeout=500)
+       # forward_response.raise_for_status()
 
         return jsonify({"message": "Images processed successfully"}), 200
 
