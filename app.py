@@ -96,6 +96,24 @@ def create_app():
         else:
             return jsonify({'error': 'No request found with the provided identifier'}), 404
 
+#check for duplicate requests
+    @app.route('/check_duplicate', methods=['GET'])
+    def check_duplicate():
+        """Route to check if a request with the given identifier already exists"""
+        identifier = request.headers.get('Identifier')
+
+        if not identifier:
+            return jsonify({'error': 'No identifier provided'}), 400
+
+        existing_request = mongo.db.requests.find_one({'identifier': identifier})
+
+        if existing_request:
+            return jsonify({'duplicate': True,
+                            'message': 'A request with this identifier already exists'})
+        else:
+            return jsonify({'duplicate': False,
+                            'message': 'No duplicate request found'})
+
     return app
 
 # if __name__ == '__main__':
