@@ -17,7 +17,7 @@ from spacecraft_telem import Spacecraft
 app = Flask(__name__)
 
 DB_URL = 'http://127.0.0.1:5000'
-M7_URL = 'http://example.com'
+M7_URL = 'http://25.50.246.152:8080'
 M5_URL = 'http://example.com'
 
 spacecraft = Spacecraft(identifier='ISS', latitude=5.66, longitude=2.55)  # TBD
@@ -34,16 +34,14 @@ def post_request_endpoint():
         identifier = data.get('ID')
         longitude = data.get('Longitude')
         latitude = data.get('Latitude')
-        number_of_images = data.get('NumberOfImages')
 
         # Parse the strings parsed from the Request into the required datatypes
         longitude = float(longitude)
         latitude = float(latitude)
-        number_of_images = int(number_of_images)
 
         status_code = -1
         # Check if any of the parameters are missing
-        if None in [identifier, longitude, latitude, number_of_images]:
+        if None in [identifier, longitude, latitude]:
             status_code = 2
 
         # TODO: Need to run postman tests here. Objective for Sprint #4
@@ -52,7 +50,7 @@ def post_request_endpoint():
         # if postman_test_result:
 
         if status_code !=2:
-            request_data = Request(identifier,longitude,latitude,number_of_images)
+            request_data = Request(identifier,longitude,latitude)
             final_result = total_check(request_data, spacecraft)
             if final_result:
                 status_code = 0
@@ -60,7 +58,7 @@ def post_request_endpoint():
                 status_code = 1
 
         # Saving the record to the database
-        im_req = ImageRequest(identifier, longitude, latitude, number_of_images, status_code)
+        im_req = ImageRequest(identifier, longitude, latitude, status_code)
         requests.post(DB_URL + "/add_request", json=im_req.__dict__, timeout = 500)
 
         # Returning the status code to Module #7
