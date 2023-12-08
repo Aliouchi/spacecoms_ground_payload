@@ -16,17 +16,27 @@ from spacecraft_telem import Spacecraft
 
 app = Flask(__name__)
 
-DB_URL = 'http://127.0.0.1:5000'
-M7_URL = 'http://25.50.246.152:8080'
-M5_URL = 'http://example.com'
+FILE_NAME = "ServiceIPs.txt"
 
-spacecraft = Spacecraft(identifier='ISS', latitude=5.66, longitude=2.55)  # TBD
+def load_ip(module_number, file_name):
+    """ A method to get an IP address for the corresponding module from .txt file """
+    with open(file_name, encoding="utf-8") as file:
+        for line in file:
+            ip, service_number = line.strip().split(',')
+            service_number = int(service_number)
+            if service_number == module_number:
+                return ip
+
+DB_URL = 'http://127.0.0.1:5000'
+M5_URL = load_ip(5, FILE_NAME) + ":8080"
+M7_URL = load_ip(7, FILE_NAME) + ":8080"
+
+
+spacecraft = Spacecraft(identifier='ISS', latitude=5.66, longitude=2.55)
 
 @app.route('/request', methods=['POST'])
 def post_request_endpoint():
-    """
-    Handle the '/request' endpoint for processing requests.
-    """
+    """ Handle the '/request' endpoint for processing requests. """
     try:
         data = request.json  # Retrieve JSON data from the request body
 
@@ -68,11 +78,9 @@ def post_request_endpoint():
         }
         requests.post(M7_URL + "/Status", json=status_response, timeout = 500)
 
-        # TODO: Need to forward the request to Module #5 Objective for Sprint #4
-
         # Forming the request response to return to Module #7
         if status_code == 0:
-            requests.post(M5_URL, json = data, timeout = 500)
+            requests.post(M5_URL + "/receive", json = data, timeout = 500)
             return jsonify({"message": "Valid Request"}), 200
         elif status_code == 1:
             return jsonify({"message": "Rejected by logic"}),200

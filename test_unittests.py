@@ -7,6 +7,7 @@ import unittest
 # from app import create_app
 from logic_checks import date_time_check, distance_check, id_check, total_check
 from request_struct import Request
+from routing import load_ip
 from spacecraft_telem import Spacecraft
 
 # import os
@@ -134,3 +135,17 @@ class TestLogicChecks(unittest.TestCase):
         request = Request("20231345_256789", 0.01, 0.01)
         spacecraft = Spacecraft("20231020_123012", 0.00, 0.00)
         self.assertFalse(total_check(request, spacecraft))
+
+class TestRouting(unittest.TestCase):
+    """A class with all the tests to validate routing methods """
+    def test_load_ip_5(self):
+        """A test checking if load_ip method loads module 5's ip properly"""
+        module_5_ip = load_ip(5, "ip_testing.txt")
+
+        assert module_5_ip == "10.144.111.63"
+
+    def test_load_ip_7(self):
+        """A test checking if load_ip method loads module 7's ip properly"""
+        module_7_ip = load_ip(7, "ip_testing.txt")
+
+        assert module_7_ip == "10.144.111.120"
