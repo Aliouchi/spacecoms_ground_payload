@@ -18,9 +18,9 @@ app = Flask(__name__)
 
 FILE_NAME = "ServiceIPs.txt"
 
-def load_ip(module_number):
+def load_ip(module_number, file_name):
     """ A method to get an IP address for the corresponding module from .txt file """
-    with open(FILE_NAME, encoding="utf-8") as file:
+    with open(file_name, encoding="utf-8") as file:
         for line in file:
             ip, service_number = line.strip().split(',')
             service_number = int(service_number)
@@ -28,8 +28,8 @@ def load_ip(module_number):
                 return ip
 
 DB_URL = 'http://127.0.0.1:5000'
-M5_URL = load_ip(5) + ":8080"
-M7_URL = load_ip(7) + ":8080"
+M5_URL = load_ip(5, FILE_NAME) + ":8080"
+M7_URL = load_ip(7, FILE_NAME) + ":8080"
 
 spacecraft = Spacecraft(identifier='ISS', latitude=5.66, longitude=2.55)
 
