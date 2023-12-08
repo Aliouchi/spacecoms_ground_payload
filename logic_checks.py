@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime
 from math import asin, cos, radians, sin, sqrt
 
 # INSERT RADIUS OF THE PLANETARY OBJECT WE ARE RESEARCHING HERE (SET TO PLANET EARTH BY DEFAULT)
@@ -15,7 +14,7 @@ def total_check(data_request, spacecraft):
     """A method to verify the overall request logic (runs all the individual checks)"""
     flag = False
 
-    if(distance_check(data_request, spacecraft) is True and images_check(data_request) is True and
+    if(distance_check(data_request, spacecraft) is True and
         id_check(data_request) is True and date_time_check(data_request) is True):
         flag = True
 
@@ -48,32 +47,14 @@ def distance_check(data_request, spacecraft):
 
     return flag
 
-def images_check(data_request):
-    """A method to verify the number of images requested (needs to be between 1 and 99)"""
-    flag = False
 
-    if (data_request.number_of_images >= 1 and data_request.number_of_images <= 99):
-        flag = True
-
-    return flag
 
 def id_check(data_request):
     """A method to verify the format of the identifier provided"""
-    regex_flag = False
 
     regex = re.compile(r"\d{8}_\d{6}")
-    if re.fullmatch(regex, data_request.identifier):
-        regex_flag = True
-    else:
-        regex_flag = False
+    return re.fullmatch(regex, data_request.identifier) is not None
 
-    datetime_split = data_request.identifier.split("_")
-    date_format = "%Y%m%d"
-
-    if(datetime.strptime(datetime_split[0], date_format) and regex_flag):
-        return True
-    else:
-        return False
 
 def date_time_check(data_request):
     """A method to parse the identifier property and check the validity of date & time"""

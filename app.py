@@ -8,11 +8,10 @@ from flask_pymongo import PyMongo
 
 class ImageRequest:
     """class structure for the image request"""
-    def __init__(self, identifier, latitude, longitude, number_of_images, status):
+    def __init__(self, identifier, latitude, longitude, status):
         self.identifier = identifier
         self.latitude = latitude
         self.longitude = longitude
-        self.number_of_images = number_of_images
         self.status = status
 
 def create_app():
@@ -27,9 +26,6 @@ def create_app():
     def add_request():
         """route that adds a new request with the specified structure to the database"""
         data = request.json
-        # new_request = ImageRequest(data['identifier'], data['latitude'],
-        #                             data['longitude'], data['number_of_images'],
-        #                               data['status'])
         mongo.db.requests.insert_one(data)
         return jsonify({'message': 'Request added successfully'})
 # get request by id
