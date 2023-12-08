@@ -16,13 +16,13 @@ class Request:
     #    self.latitude = 0.00
     #    self.number_of_images = 1
 
-    def __init__(self, identifier, longitude, latitude, number_of_images):
+    def __init__(self, identifier, longitude, latitude):
         """A method to initialize the Request class"""
         self.identifier = identifier
         self.longitude = longitude
         self.latitude = latitude
-        self.number_of_images = number_of_images
+
 
     def __str__(self):
         """A method converting the Request object into a printable string"""
-        return f"Request #{self.identifier}: (longitude: {self.longitude}, latitude: {self.latitude}, number_of_images: {self.number_of_images})"
+        return f"Request #{self.identifier}: (longitude: {self.longitude}, latitude: {self.latitude})"
