@@ -16,9 +16,9 @@ from spacecraft_telem import Spacecraft
 
 app = Flask(__name__)
 
-DB_URL = 'http://127.0.0.1:5000'
-M7_URL = 'http://example.com'
-M5_URL = 'http://example.com'
+DB_URL = 'http://25.8.118.141:5000'
+M7_URL = 'https://eovcp4vr10b5qqo.m.pipedream.net/'
+M5_URL =  'http://25.8.118.141:5000'
 
 spacecraft = Spacecraft(identifier='ISS', latitude=5.66, longitude=2.55)  # TBD
 
@@ -93,13 +93,15 @@ def post_images_endpoint():
     try:
         data = request.json
 
-        requests.post(M7_URL + "/images", json=data, timeout=500)
-       # forward_response.raise_for_status()
+        response = requests.post(M7_URL + "/images", json=data, timeout=500)
+        response.raise_for_status()  
 
         return jsonify({"message": "Images processed successfully"}), 200
 
     except requests.exceptions.RequestException as e:
+        print(f"Error processing images: {str(e)}")
         return jsonify({"message": f"Error processing images: {str(e)}"}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, host='0.0.0.0', port=8080)
+

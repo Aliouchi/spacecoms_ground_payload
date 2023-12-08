@@ -1,0 +1,9 @@
+POST http://127.0.0.1:8080/images
+Content-Type: application/json
+
+{
+    "ID": "20231020_123012",
+    "Longitude": "2.75",
+    "Latitude": "5.90",
+    "NumberOfImages": 2
+}
